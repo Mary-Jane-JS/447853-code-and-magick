@@ -3,7 +3,7 @@
 window.renderStatistics = function (ctx, names, times) {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
   ctx.fillRect(110, 20, 420, 270);
-  ctx.fillStyle = 'rgba(256, 256, 256, 1.0)'; // white;
+  ctx.fillStyle = 'rgb(255, 255, 255)'; // white;
   ctx.fillRect(100, 10, 420, 270);
 
   ctx.fillStyle = '#000'; // black;
@@ -21,7 +21,7 @@ window.renderStatistics = function (ctx, names, times) {
   }
 
   var histogramHeight = 150;
-  var step = histogramHeight / (max - 0); // px;
+  var step = histogramHeight / max; // px;
   var barWidth = 40;
   var indent = 50; // px;
   var initialX = 120; // px;
@@ -30,19 +30,14 @@ window.renderStatistics = function (ctx, names, times) {
   var randomOpacity;
   var computedX;
   var computedY;
+  var playerColumnColor = 'rgb(255, 0, 0)';
 
   ctx.textBaseline = 'top'; // положение надписи от левого верхнего угла
-  ctx.rectBaseline = 'top';
   for (var i = 0; i < times.length; i++) {
-    randomOpacity = Math.random().toFixed(1);
+    randomOpacity = Math.random().toFixed(3);
     computedX = initialX + i * (barWidth + indent);
     computedY = (histogramHeight - times[i] * step) + initialY;
-
-    if (names[i] === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-    } else {
-      ctx.fillStyle = 'rgba(2, 14, 134,' + randomOpacity + ')';
-    }
+    ctx.fillStyle = names[i] === 'Вы' ? playerColumnColor : 'rgba(0, 0, 255,' + randomOpacity + ')';
     ctx.fillRect(computedX, computedY, barWidth, times[i] * step);
     ctx.fillStyle = '#000';
     ctx.fillText(Math.floor(times[i]), computedX, computedY - textPadding);
