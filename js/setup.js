@@ -18,6 +18,13 @@ var WIZARD_CONFIG = {
     'yellow',
     'green'
   ],
+  fireballColors: [
+    '#ee4830',
+    '#30a8ee',
+    '#5ce6c0',
+    '#e848d5',
+    '#e6e848',
+  ],
   generateName: function () {
     return this.names[returnRandom(this.names.length)] + ' ' + this.lastnames[returnRandom(this.lastnames.length)];
   },
@@ -26,11 +33,64 @@ var WIZARD_CONFIG = {
   },
   generateCoatColor: function () {
     return this.coatColors[returnRandom(this.coatColors.length)];
+  },
+  generateFireballColor: function () {
+    return this.fireballColors[returnRandom(this.fireballColors.length)];
   }
 };
-var userDialog = document.querySelector('.setup');
 
-userDialog.classList.remove('hidden');
+var userDialog = document.querySelector('.setup');
+var userDialogOpen = document.querySelector('.setup-open');
+var userDialogClose = userDialog.querySelector('.setup-close');
+var userDialogSetupName = userDialog.querySelector('.setup-user-name');
+var userDialogSubmit = userDialog.querySelector('.setup-submit');
+var wizardSetup = userDialog.querySelector('.setup-wizard');
+var wizardCoat = wizardSetup.querySelector('.wizard-coat');
+var wizardEyes = wizardSetup.querySelector('.wizard-eyes');
+var fireball = userDialog.querySelector('.setup-fireball-wrap');
+var openPopup = function () {
+  userDialog.classList.remove('hidden');
+};
+var closePopup = function () {
+  userDialog.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+var onPopupEscPress = function (event) {
+  if (event.keyCode === 27 && event.target !== userDialogSetupName) {
+    closePopup();
+  }
+};
+var onPopupEnterPress = function (event) {
+  if (event.keyCode === 13) {
+    closePopup();
+  }
+};
+
+wizardCoat.addEventListener('click', function (event) {
+  changeWizardColors(event.target, WIZARD_CONFIG.generateCoatColor());
+});
+wizardEyes.addEventListener('click', function (event) {
+  changeWizardColors(event.target, WIZARD_CONFIG.generateEyesColor());
+});
+fireball.addEventListener('click', function (event) {
+  changeWizardColors(event.currentTarget, WIZARD_CONFIG.generateFireballColor(), 'background');
+});
+
+userDialogOpen.addEventListener('click', function () {
+  openPopup();
+  document.addEventListener('keydown', onPopupEscPress);
+});
+userDialogClose.addEventListener('click', function () {
+  closePopup();
+});
+userDialogOpen.addEventListener('keydown', function (event) {
+  if (event.keyCode === 13) {
+    openPopup();
+  }
+});
+userDialogClose.addEventListener('keydown', onPopupEnterPress);
+userDialogSubmit.addEventListener('click', closePopup());
+userDialogSubmit.addEventListener('keydown', onPopupEnterPress);
 showWizards();
 
 function showWizards() {
@@ -71,6 +131,14 @@ function renderWizard(wizard) {
   wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
   wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
   return wizardElement;
+}
+
+function changeWizardColors(elem, color, option) {
+  if (option === 'background') {
+    elem.style.background = color;
+  } else {
+    elem.style.fill = color;
+  }
 }
 
 
