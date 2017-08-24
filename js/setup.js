@@ -91,6 +91,8 @@ userDialogOpen.addEventListener('keydown', function (event) {
 userDialogClose.addEventListener('keydown', onPopupEnterPress);
 userDialogSubmit.addEventListener('click', closePopup());
 userDialogSubmit.addEventListener('keydown', onPopupEnterPress);
+userDialogSetupName.setAttribute('minlength', 2);
+userDialogSetupName.setAttribute('maxlength', 25);
 showWizards();
 
 function showWizards() {
